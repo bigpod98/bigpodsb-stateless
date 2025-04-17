@@ -29,19 +29,19 @@ jobs:
     - name: tag
       shell: bash
       run: |
-        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:${{ matrix.image_version }}
+        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavour }}${{ matrix.image_type }}:${{ matrix.image_version }}
     - name: tag42aslatest
       shell: bash
       if: matrix.image_version == 42
       run: |
-        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:latest
+        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavour }}-${{ matrix.image_type }}:latest
     - name: login
       shell: bash
       run: podman login ghcr.io -u bigpod98 -p ${{ secrets.GITHUB_TOKEN }}
     - name: push
       shell: bash
-      run: podman push ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:${{ matrix.image_version }}
+      run: podman push ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavour }}-${{ matrix.image_type }}:${{ matrix.image_version }}
     - name: pushlatest
       if: matrix.image_version == 42
       shell: bash
-      run: podman push ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:latest
+      run: podman push ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavour }}-${{ matrix.image_type }}:latest
