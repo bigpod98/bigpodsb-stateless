@@ -17,31 +17,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: [main, nvidia]
-        image_type: [silverblue, kinoite, cosmic-atomic]
-        major_version: [42]
+        image_type: [main, nvidia]
+        image_flavour: [silverblue, kinoite, cosmic-atomic, base, budgie-atomic]
+        image_version: [42]
     steps:
     - name: Checkout Push to Registry action
       uses: actions/checkout@v3
     - name: build
       shell: bash
-      run: podman build . -t buildoutput:latest --build-arg IMAGE_TYPE=$(./checks.sh ${{ matrix.image_flavor }}) --build-arg FEDORA_MAJOR_VERSION=${{ matrix.major_version }}
+      run: podman build . -t buildoutput:latest --build-arg IMAGE_BASE=ghcr.io/ublue-os --build-arg IMAGE_FLAVOUR=${{ matrix.image_flavour }} --build-arg IMAGE_TYPE=${{ matrix.image_type }} --build-arg IMAGE_VERSION=${{ matrix.image_version }} 
     - name: tag
       shell: bash
       run: |
-        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/alpha-${{ matrix.image_flavor }}:${{ matrix.major_version }}
-    - name: tag40aslatest
+        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:${{ matrix.image_version }}
+    - name: tag42aslatest
       shell: bash
-      if: matrix.major_version == 41
+      if: matrix.image_version == 42
       run: |
-        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/alpha-${{ matrix.image_flavor }}:latest
+        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:latest
     - name: login
       shell: bash
       run: podman login ghcr.io -u bigpod98 -p ${{ secrets.GITHUB_TOKEN }}
     - name: push
       shell: bash
-      run: podman push ghcr.io/bigpod98/bigpodsb/alpha-${{ matrix.image_flavor }}:${{ matrix.major_version }}
+      run: podman push ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:${{ matrix.image_version }}
     - name: pushlatest
-      if: matrix.major_version == 41
+      if: matrix.image_version == 42
       shell: bash
-      run: podman push ghcr.io/bigpod98/bigpodsb/alpha-${{ matrix.image_flavor }}:latest
+      run: podman push ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavor }}-${{ matrix.image_type }}:latest
