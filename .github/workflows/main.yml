@@ -29,7 +29,7 @@ jobs:
     - name: tag
       shell: bash
       run: |
-        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavour }}${{ matrix.image_type }}:${{ matrix.image_version }}
+        podman tag buildoutput:latest ghcr.io/bigpod98/bigpodsb/stateless/${{ matrix.image_flavour }}-${{ matrix.image_type }}:${{ matrix.image_version }}
     - name: tag42aslatest
       shell: bash
       if: matrix.image_version == 42
